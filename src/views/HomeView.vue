@@ -1,18 +1,34 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div>
+    <p>Spaces Left: {{ spacesLeft }} of {{ capacity }}</p>
+    <div>Capacity: {{ capacity }}</div>
+    <button @click="increaseCapacity()">Increase</button>
+    <ul>
+      <li v-for="(name, index) in attending" :key="index">
+        {{ name }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import { computed, reactive, toRefs } from "vue";
 export default {
-  name: "HomeView",
-  components: {
-    HelloWorld,
+  setup() {
+    const event = reactive({
+      capacity: 1,
+      attending: ["Tim", "Bob", "Joe"],
+
+      spacesLeft: computed(() => {
+        return event.capacity - event.attending.length;
+      }),
+    });
+
+    const increaseCapacity = () => {
+      event.capacity++;
+    };
+
+    return { ...toRefs(event), increaseCapacity };
   },
 };
 </script>
